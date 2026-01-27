@@ -16,7 +16,7 @@ class Cobot:
     def jogJoint(self,dirn: Dirn,jointNo: int):
         if self.sock!=None:
             self.sock.sendall(b"j"+dirn.value.encode()+str(jointNo).encode())
-    def jogCartesian(self,dirn: Dirn,jointNo:int):
+    def jogCartesian(self,dirn: Dirn,jointNo: int):
         if self.sock!=None:
             self.sock.sendall(b"c"+dirn.value.encode()+str(jointNo).encode())
     def gripperOpen(self):
@@ -25,6 +25,15 @@ class Cobot:
     def gripperClose(self):
         if self.sock!=None:
             self.sock.sendall(b"gc")
+    def stopServer(self):
+        if self.sock!=None:
+            self.sock.sendall(b"q")
+    def stopJogging(self):
+        if self.sock!=None:
+            self.sock.sendall(b"f")
+    def baseRigid(self):
+        if self.sock!=None:
+            self.sock.sendall(b"b")
     def __enter__(self):
         self.connect()
     def __exit__(self):
