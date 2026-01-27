@@ -1,13 +1,30 @@
 import socket
-
-
+from enum import Enum
+class Dirn(Enum):
+    POSITIVE='+'
+    NEGATIVE='-'
 class Cobot:
-    def __init__(self,host,port):
+    def __init__(self,host):
         self.host=host
-        self.port=port
+        self.port=5000
         self.sock=None
     def __del__(self):
         self.disconnect()
+    def setVelocity(self,velocity):
+        if self.sock!=None:
+            self.sock.sendall(b"v"+str(velocity).encode())
+    def jogJoint(self,dirn: Dirn,jointNo: int):
+        if self.sock!=None:
+            self.sock.sendall(b"j"+dirn.value.encode()+str(jointNo).encode())
+    def jogCartesian(self,dirn: Dirn,jointNo:int):
+        if self.sock!=None:
+            self.sock.sendall(b"c"+dirn.value.encode()+str(jointNo).encode())
+    def gripperOpen(self):
+        if self.sock!=None:
+            self.sock.sendall(b"go")
+    def gripperClose(self):
+        if self.sock!=None:
+            self.sock.sendall(b"gc")
     def __enter__(self):
         self.connect()
     def __exit__(self):
