@@ -1,0 +1,1 @@
+from .cobot import Cobot
