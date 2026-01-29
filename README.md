@@ -1,12 +1,12 @@
-# Cobot Python Client Library
+#   Addverb's Cobot Python Client Library
 
-This project provides a Python-based client library designed to interface with a robotic cobot system. It allows for remote control of joint jogging, Cartesian movements, gripper operations, and velocity scaling over a network using a custom TCP protocol.
+This project provides a Python-based client library designed to interface with Addverb's cobot. It allows for remote control of joint jogging, Cartesian movements, gripper operations, querying positions and velocity scaling over a network using a custom TCP protocol.
 
 ### Overview
 
 The system operates on a client-server architecture:
 
-* **The Backend (C++):** A control server runs directly on the cobot's hardware or controller. It handles hardware safety states, and listens for incoming TCP instructions on port 5000. It utilizes a dedicated thread to process network packets while maintaining the real-time control loop.
+* **The Backend (C++):** A control server runs directly on Addverb's cobot hardware or controller. It handles hardware safety states, and listens for incoming TCP instructions on port 5000. It utilizes a dedicated thread to process network packets while maintaining the real-time control loop.
 * **The Client (Python):** This library provides a high-level `Cobot` class that abstracts the TCP socket communication into simple method calls. Users can control the robot without needing to manage raw byte buffers or manual socket states.
 
 ### Requirements
