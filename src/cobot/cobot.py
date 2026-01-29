@@ -19,15 +19,13 @@ class Cobot:
     def __del__(self):
         self.disconnect()
 
-
-    # for `with open` statements
     def __enter__(self):
         self.connect()
-    def __exit__(self):
+        return self
+    def __exit__(self, exc_type, exc_val, exc_tb):
         self.disconnect()
 
-
-    # it is better to use `with open` instead of these for proper socket operations
+    # it is better to use `with` instead of these for proper socket operations
     def connect(self):
         self.sock=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         self.sock.connect((self.host,self.port))
