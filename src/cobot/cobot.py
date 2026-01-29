@@ -1,15 +1,42 @@
 import socket
 from enum import Enum
+
+
+# felt cleaner
 class Dirn(Enum):
     POSITIVE='+'
     NEGATIVE='-'
+
+
+
+# main controlling class
 class Cobot:
+
     def __init__(self,host):
         self.host=host
         self.port=5000
         self.sock=None
     def __del__(self):
         self.disconnect()
+
+
+    # for `with open` statements
+    def __enter__(self):
+        self.connect()
+    def __exit__(self):
+        self.disconnect()
+
+
+    # it is better to use `with open` instead of these for proper socket operations
+    def connect(self):
+        self.sock=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+        self.sock.connect((self.host,self.port))
+    def disconnect(self):
+        if self.sock!=None:
+            self.sock.close()
+        self.sock=None
+
+    # for jogging the cobot around
     def setVelocity(self,velocity):
         if self.sock!=None:
             self.sock.sendall(b"v"+str(velocity).encode())
@@ -19,29 +46,57 @@ class Cobot:
     def jogCartesian(self,dirn: Dirn,jointNo: int):
         if self.sock!=None:
             self.sock.sendall(b"c"+dirn.value.encode()+str(jointNo).encode())
+
+    # stop cobot
+    def stopJogging(self):
+        if self.sock!=None:
+            self.sock.sendall(b"f")
+
+
+    # these are non-blocking but the operation will take 5 seconds on the cobot to complete
+    # extra 2 seconds if controller is switched (mostly for ensuring controller switch doesnt fail)
     def gripperOpen(self):
         if self.sock!=None:
             self.sock.sendall(b"go")
     def gripperClose(self):
         if self.sock!=None:
             self.sock.sendall(b"gc")
-    def stopServer(self):
+
+    
+    # query operations: all return list[] with 6 decimal values
+    def queryPos(self):
         if self.sock!=None:
-            self.sock.sendall(b"q")
-    def stopJogging(self):
+            self.sock.sendall(b"qp")
+            return eval(self.sock.recv(1024).decode())
+        return []
+    def queryJointVel(self):
         if self.sock!=None:
-            self.sock.sendall(b"f")
+            self.sock.sendall(b"qjv")
+            return eval(self.sock.recv(1024).decode())
+        return []
+    def queryJointRot(self):
+        if self.sock!=None:
+            self.sock.sendall(b"qjp")
+            return eval(self.sock.recv(1024).decode())
+        return []
+    def queryJointTorque(self):
+        if self.sock!=None:
+            self.sock.sendall(b"qjt")
+            return eval(self.sock.recv(1024).decode())
+        return []
+    def queryJointAccn(self):
+        if self.sock!=None:
+            self.sock.sendall(b"qja")
+            return eval(self.sock.recv(1024).decode())
+        return []
+    
+
+    # for recovery in case of failure
     def baseRigid(self):
         if self.sock!=None:
             self.sock.sendall(b"b")
-    def __enter__(self):
-        self.connect()
-    def __exit__(self):
-        self.disconnect()
-    def connect(self):
-        self.sock=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-        self.sock.connect((self.host,self.port))
-    def disconnect(self):
+
+    # stop the server (not only closes connection, but also terminates server on cobot)
+    def stopServer(self):
         if self.sock!=None:
-            self.sock.close()
-        self.sock=None
+            self.sock.sendall(b"e")

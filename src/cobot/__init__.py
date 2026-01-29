@@ -1,2 +1,1 @@
-from .cobot import Cobot
-from .cobot import Dirn
+from .cobot import Cobot, Dirn
