@@ -43,19 +43,31 @@ from cobot import Cobot, Dirn
 # local IPs start from 10. 
 # look for inet 10.x.y.z
 with Cobot(host="10.x.y.z") as arm:
-    # Set speed multiplier
+    # set speed multiplier
     arm.setVelocity(1.5)
     
-    # Jog the first joint in a positive direction
+    # jog the first joint in a positive direction
     arm.jogJoint(Dirn.POSITIVE, 0)
 
-    # Open gripper
-    arm.gripperOpen()
-    
-    # Close the gripper
-    arm.gripperClose()
-    
-    # Stop all movement
+    # let it jog for a bit
+    time.sleep(5)
+
+    # stop all movement
     arm.stopJogging()
 
+    # move to base
+    arm.baseRigid()
+    
+    # +x dirn
+    arm.jogCartesian(Dirn.NEGATIVE, 0)
+    
+    # stop all movement
+    arm.stopJogging()
+    
+    # Open gripper ~ 5s
+    arm.gripperOpen()
+    
+    # Close the gripper ~ 5s
+    arm.gripperClose()
+    
 ```

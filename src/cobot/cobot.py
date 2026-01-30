@@ -1,4 +1,5 @@
 import socket
+import time
 from enum import Enum
 
 
@@ -51,14 +52,15 @@ class Cobot:
             self.sock.sendall(b"f")
 
 
-    # these are non-blocking but the operation will take 5 seconds on the cobot to complete
-    # extra 2 seconds if controller is switched (mostly for ensuring controller switch doesnt fail)
+    # grippers are now blocking to make sure the code syncs with cobot nicely
     def gripperOpen(self):
         if self.sock!=None:
             self.sock.sendall(b"go")
+            time.sleep(5)
     def gripperClose(self):
         if self.sock!=None:
             self.sock.sendall(b"gc")
+            time.sleep(5)
 
     
     # query operations: all return list[] with 6 decimal values
