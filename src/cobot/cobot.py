@@ -18,7 +18,6 @@ class Cobot:
         self.sock=None
     def __del__(self):
         self.disconnect()
-
     def __enter__(self):
         self.connect()
         return self
