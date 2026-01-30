@@ -91,10 +91,11 @@ class Cobot:
         return []
     
 
-    # for recovery in case of failure
+    # for recovery in case of failure, blocking function ~10s
     def baseRigid(self):
         if self.sock!=None:
             self.sock.sendall(b"b")
+            time.sleep(10)
 
     # stop the server (not only closes connection, but also terminates server on cobot)
     def stopServer(self):
