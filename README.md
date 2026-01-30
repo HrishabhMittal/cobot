@@ -55,11 +55,14 @@ with Cobot(host="10.x.y.z") as arm:
     # stop all movement
     arm.stopJogging()
 
-    # move to base
+    # move to base ~ 10s
     arm.baseRigid()
-    
+
     # +x dirn
     arm.jogCartesian(Dirn.NEGATIVE, 0)
+    
+    # let it jog for a bit
+    time.sleep(10)
     
     # stop all movement
     arm.stopJogging()
@@ -69,5 +72,4 @@ with Cobot(host="10.x.y.z") as arm:
     
     # Close the gripper ~ 5s
     arm.gripperClose()
-    
 ```

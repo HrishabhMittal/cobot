@@ -1,5 +1,4 @@
 import socket
-import time
 from enum import Enum
 
 
@@ -34,7 +33,12 @@ class Cobot:
         if self.sock!=None:
             self.sock.close()
         self.sock=None
-
+    def ping(self):
+        if self.sock!=None:
+            self.sock.send(b"p")
+            self.sock.recv(1)
+            return True
+        return False
     # for jogging the cobot around
     def setVelocity(self,velocity):
         if self.sock!=None:
@@ -56,13 +60,12 @@ class Cobot:
     def gripperOpen(self):
         if self.sock!=None:
             self.sock.sendall(b"go")
-            time.sleep(5)
+            self.ping()
     def gripperClose(self):
         if self.sock!=None:
             self.sock.sendall(b"gc")
-            time.sleep(5)
+            self.ping()
 
-    
     # query operations: all return list[] with 6 decimal values
     def queryPos(self):
         if self.sock!=None:
@@ -95,7 +98,7 @@ class Cobot:
     def baseRigid(self):
         if self.sock!=None:
             self.sock.sendall(b"b")
-            time.sleep(10)
+            self.ping()
 
     # stop the server (not only closes connection, but also terminates server on cobot)
     def stopServer(self):
