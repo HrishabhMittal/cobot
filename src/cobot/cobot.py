@@ -1,5 +1,5 @@
-import socket
 from enum import Enum
+from socket import AF_INET, SOCK_STREAM, socket
 
 
 # felt cleaner
@@ -26,7 +26,7 @@ class Cobot:
 
     # it is better to use `with` instead of these for proper socket operations
     def connect(self):
-        self.sock=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+        self.sock=socket(AF_INET,SOCK_STREAM)
         self.sock.connect((self.host,self.port))
     def disconnect(self):
         if self.sock!=None:

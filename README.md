@@ -73,3 +73,29 @@ with Cobot(host="10.x.y.z") as arm:
     # Close the gripper ~ 5s
     arm.gripperClose()
 ```
+
+
+### Bluetooth Rerouter Usage
+
+
+Make sure the serial port is open on rfcomm0
+```bash
+sudo sdptool add SP
+sudo rfcomm listen 0 1
+
+# make sure your user is added to groups uucp, which owns rfcomm serial ports
+sudo usermod -aG uucp "$USER"
+# you might need to logout and login for changes
+# check using
+groups
+# see if uucp is listen
+# if not
+# quick fix
+newgrp uucp
+```
+
+To use bluetooth rerouter
+```python
+arm=BluetoothCobot("10.x.y.z","/dev/rfcomm0")
+arm.reroute()
+```
