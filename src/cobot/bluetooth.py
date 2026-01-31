@@ -1,11 +1,13 @@
 from socket import AF_INET, SOCK_STREAM, socket
 import serial
 class BluetoothCobot:
-    def __init__(self,host,comm):
+    def __init__(self,host: str,comm: str,password: str):
         self.host=host
         self.port=5000
         self.sock=socket(AF_INET,SOCK_STREAM)
         self.sock.connect((self.host,self.port))
+        self.sock.recv(1) # 'a'
+        self.sock.send(password.encode())
         self.ser=serial.Serial(comm,9600,timeout=0.1)
     def reroute(self):
         running=True

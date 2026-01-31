@@ -12,10 +12,11 @@ class Dirn(Enum):
 # main controlling class
 class Cobot:
 
-    def __init__(self,host):
+    def __init__(self,host: str,password: str):
         self.host=host
         self.port=5000
         self.sock=None
+        self.password=password
     def __del__(self):
         self.disconnect()
     def __enter__(self):
@@ -28,6 +29,8 @@ class Cobot:
     def connect(self):
         self.sock=socket(AF_INET,SOCK_STREAM)
         self.sock.connect((self.host,self.port))
+        self.sock.recv(1) # 'a'
+        self.sock.send(self.password.encode())
     def disconnect(self):
         if self.sock!=None:
             self.sock.close()
