@@ -29,8 +29,8 @@ class Cobot:
     def connect(self):
         self.sock=socket(AF_INET,SOCK_STREAM)
         self.sock.connect((self.host,self.port))
-        self.sock.recv(1) # 'a'
-        self.sock.send(self.password.encode())
+        # self.sock.recv(1) # 'a'
+        # self.sock.send(self.password.encode())
     def disconnect(self):
         if self.sock!=None:
             self.sock.close()
@@ -51,7 +51,9 @@ class Cobot:
     def jogCartesian(self,dirn: Dirn,jointNo: int):
         if self.sock!=None:
             self.sock.sendall(b"c"+dirn.value.encode()+str(jointNo).encode())
-
+    def jogCartesianRelative(self,dirn: Dirn,jointNo: int):
+        if self.sock!=None:
+            self.sock.sendall(b"r"+dirn.value.encode()+str(jointNo).encode())
     # stop cobot
     def stopJogging(self):
         if self.sock!=None:
