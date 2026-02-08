@@ -29,8 +29,8 @@ class Cobot:
     def connect(self):
         self.sock=socket(AF_INET,SOCK_STREAM)
         self.sock.connect((self.host,self.port))
-        # self.sock.recv(1) # 'a'
-        # self.sock.send(self.password.encode())
+        self.sock.recv(1) # 'a'
+        self.sock.send(self.password.encode()+'\n'.encode())
     def disconnect(self):
         if self.sock!=None:
             self.sock.close()
